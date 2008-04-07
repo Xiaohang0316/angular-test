@@ -7,7 +7,7 @@ import { Test3Component } from './test3/test3.component';
 import { RouterguardGuard } from './routerguard.guard';
 
 const routes: Routes = [
-  { path: '', component: Test3Component },
+  { path: '', component: Test3Component }, 
   { path: 'cc', component: TestComponent, canActivate: [RouterguardGuard] },
   { path: '**', component: Test2Component },
 ];
