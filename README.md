@@ -8,8 +8,6 @@
 ### angular router
 angular路由实则是吧所有的方法定义成angular自定义指令，并调用指令来实现路由功能
 
-### 
-
 ```sh
 # 下面的命令会用 Angular CLI 来生成一个带有应用路由模块（AppRoutingModule）的基本 Angular 应用，它是一个 NgModule，可用来配置路由。下面的例子中应用的名字是 routing-app
 ng new routing-app --routing --defaults
@@ -35,6 +33,8 @@ const routes: Routes = [
 #### ActivatedRoute
 
 #### 路由守卫
+
+用于确定是否可以激活路由，所有的守卫都返回true，导航继续。如果有任何守卫返回false，则导航被取消，
 
 CanActivate				检查路由访问
 CanActivateChild	   检查子路由访问

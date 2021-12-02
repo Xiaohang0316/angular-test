@@ -8,11 +8,13 @@ import { RouterguardGuard } from './routerguard.guard';
 
 const routes: Routes = [
   { path: '', component: Test3Component }, 
-  { path: 'cc', component: TestComponent, canActivate: [RouterguardGuard] },
+  // { path: 'cc', component: TestComponent, canActivate: [RouterguardGuard] },
+  { path: 'cc', component: TestComponent},
   { path: '**', component: Test2Component },
 ];
 
 @NgModule({
+  // imports: [RouterModule.forRoot(routes,{useHash: true})],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
