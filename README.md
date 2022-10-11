@@ -28,6 +28,23 @@ const routes: Routes = [
 ];
 ```
 
+### 跳转方式 
+```
+<span routerLink='cc'> Test 1</span>
+把要添加路由的链接赋值给 routerLink 属性。将属性的值设置为该组件，以便在用户点击各个链接时显示这个值。接下来，修改组件模板以包含 <router-outlet> 标签。该元素会通知 Angular，你可以用所选路由的组件更新应用的视图。
+
+
+
+
+constructor(private router: Router) {}
+
+toAComponent() {
+    this.router.navigate(['/common/a']);
+    // 或 this.router.navigateUrl('common/a');
+}
+```
+
+
 ### Router API
 
 #### ActivatedRoute
@@ -36,8 +53,7 @@ const routes: Routes = [
 
 用于确定是否可以激活路由，所有的守卫都返回true，导航继续。如果有任何守卫返回false，则导航被取消，
 
-CanActivate				检查路由访问
-CanActivateChild	   检查子路由访问
+CanActivate/CanActiveChild：处理导航到某路由的情况
 CanDeactivate			在放弃未保存的更改之前请求许可
 Resolve						预先获取路由数据
 CanLoad					 在加载功能模块的文件之前检查
@@ -54,16 +70,58 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class RouterguardGuard implements CanActivate {
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return false;//权限控制
+export class DemoGuard1 implements CanActivate {
+  // 当用户不满足这个守卫的要求时就不能到达指定路由。
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    ...
+    return true;
   }
-  
 }
 
+
+
+
+// CanDeactivate：处理从当前路由离开的情况
+// 如果不满足这个守卫的要求就不能离开该路由。
+export class DemoGuard2 implements CanDeactivate<AComponent> {
+ canDeactivate(component: AComponent): boolean {
+   // 根据 component 的信息进行具体操作
+   retturn true;
+ }
+}
+
+
+// Resolve：在路由激活之前获取路由数据
+在进入路由时就可以立刻把数据呈现给用户。
+
+@Injectable()
+export AResolve implements Resolve<any> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+     const id = route.paramMap.get('id');
+     // 可以根据路由中的信息进行相关操作
+  }
+}
+// 最后，需要将路由守卫添加到路由配置中：
+
+const appRoutes: Routes = [
+  { 
+    path: 'common/a', 
+    component: AComponent,
+    canActivate: [DemoGurad1],
+    canDeactivate: [DemoGuard2],
+    resolve: {data: AResolve}
+   },
+  { path: 'common/b/:id', component: BComponent },
+  { path: '**', component: NotFoundComponent}, // 定义通配符路由
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  ...
+})
 ```
+
 
 
 
@@ -140,12 +198,7 @@ vue-router默认使用Hash模式.使用url的hash来模拟一个完整的url.`�
 
 
 
-## 这一段暂且搁置
 
-### router,routes,route傻傻分不清?
-1, router:一般指的就是路由实例.如$router.
-2, routes:指router路由实例的routes API.用来配置多个route路由对象.
-3, route:指的就是路由对象.例如;$route指的就是当前路由对象.
 
 
 
